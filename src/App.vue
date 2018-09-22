@@ -4,6 +4,8 @@
 
       <p>Com salário de {{ salario }}.</p>
 
+      <column-chart :data="grafico" width="100%"></column-chart>
+
       <div v-for="tabela in tabelas">
           {{tabela.nome}} : {{ calcularImposto(tabela, salario) }}
       </div>
@@ -19,13 +21,16 @@ export default {
     data () {
         return {
             tabelas: TabelasDeImpostoDeRenda,
-            salario: 400000
+            grafico: [],
+            salario: 150000
         }
     },
     methods: {
         calcularImposto(tabela, salario) {
             const calculadora = new CalculadoraDeImpostoDeRenda(tabela.tabela);
-            return calculadora.calcular(salario);
+            const impostoDevido = calculadora.calcular(salario);
+            this.grafico.push([tabela.nome, impostoDevido]);
+            return impostoDevido;
         }
     }
 }

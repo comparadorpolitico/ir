@@ -1,12 +1,6 @@
 const TabelasDeImpostoDeRenda = [{
-    nome: "Tabela de Paulo Guedes",
-    tabela:  [{
-        nome: "Valor único",
-        base: 0,
-        aliquota: 0.2
-        }]
-    },{
-    nome: "Tabela atual - 2018",
+    nome: "Atual",
+    estaVigente: true,
     tabela: [
         {
             nome: "Isento",
@@ -30,7 +24,16 @@ const TabelasDeImpostoDeRenda = [{
             aliquota: 0.27
         }
     ]},{
-    nome: "Tabela atualizada - Sindifisco",
+        nome: "P. Guedes / Bolsonaro",
+        estaVigente: false,
+        tabela:  [{
+            nome: "Valor único",
+            base: 0,
+            aliquota: 0.2
+        }]
+    },{
+    nome: "Sindifisco",
+    estaVigente: false,
     tabela: [
         {
             nome: "Isento",
@@ -54,7 +57,8 @@ const TabelasDeImpostoDeRenda = [{
             aliquota: 0.27
         }
     ]},{
-    nome: "Proposta da bancada do PT",
+    nome: "Proposta PT",
+    estaVigente: false,
     tabela: [{
         nome: "Isento",
         base: 0,

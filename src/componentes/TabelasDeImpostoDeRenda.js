@@ -24,7 +24,7 @@ const TabelasDeImpostoDeRenda = [{
             aliquota: 0.27
         }
     ]},{
-        nome: "P. Guedes / Bolsonaro",
+        nome: "Bolsonaro",
         estaVigente: false,
         tabela:  [{
             nome: "Valor único",

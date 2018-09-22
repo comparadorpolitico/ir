@@ -1,15 +1,33 @@
 <template>
-  <div id="app">
-      <input v-model="salario" placeholder="400000">
+    <div>
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Comparador de Imposto de Renda
+                    </h1>
+                    <h2 class="subtitle">
+                        Descubra quanto você paga hoje e quanto pagaria de acordo com várias propostas de alteração da tabela do imposto de renda.
+                    </h2>
+                </div>
+            </div>
+        </section>
+        <div class="container section" id="app">
 
-      <p>Com salário de {{ salario }}.</p>
+            <input v-model="salario" placeholder="400000">
 
-      <column-chart :data="grafico" width="100%"></column-chart>
+            <p>Com salário de {{ salario }}.</p>
 
-      <div v-for="tabela in tabelas">
-          {{tabela.nome}} : {{ calcularImposto(tabela, salario) }}
-      </div>
-  </div>
+            <column-chart :data="grafico" width="100%"></column-chart>
+
+            <div class="notification">
+                <div v-for="tabela in tabelas">
+                    {{tabela.nome}} : {{ calcularImposto(tabela, salario) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -36,4 +54,4 @@ export default {
 }
 </script>
 
-<style lang="sass"></style>
+<style lang="sass" src="bulma"></style>

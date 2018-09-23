@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="hero is-primary">
+        <header class="hero is-primary">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
@@ -11,7 +11,19 @@
                     </h2>
                 </div>
             </div>
-        </section>
+            <div class="hero-foot">
+                <nav class="tabs is-boxed">
+                    <div class="container">
+                        <ul>
+                            <li class="is-active"><a href>Propostas</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+
+
         <div class="container section" id="app">
             <div class="field is-horizontal">
                 <div class="field-label is-normal">

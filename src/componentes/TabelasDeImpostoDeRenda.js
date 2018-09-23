@@ -8,19 +8,19 @@ const TabelasDeImpostoDeRenda = [{
             aliquota: 0
         }, {
             nome: "7,5%",
-            base: 190399,
+            base: 1903.99,
             aliquota: 0.075
         }, {
             nome: "15%",
-            base: 282667,
+            base: 2826.67,
             aliquota: 0.15
         }, {
             nome: "22,5%",
-            base: 375106,
+            base: 3751.06,
             aliquota: 0.225
         },{
             nome: "27,5%",
-            base: 466469,
+            base: 4664.69,
             aliquota: 0.27
         }
     ]},{
@@ -41,19 +41,19 @@ const TabelasDeImpostoDeRenda = [{
             aliquota: 0
         }, {
             nome: "7,5%",
-            base: 355656,
+            base: 3556.56,
             aliquota: 0.075
         }, {
             nome: "15%",
-            base: 528009,
+            base: 5280.09,
             aliquota: 0.15
         }, {
             nome: "22,5%",
-            base: 707323,
+            base: 7073.23,
             aliquota: 0.225
         },{
             nome: "27,5%",
-            base: 883792,
+            base: 8837.92,
             aliquota: 0.27
         }
     ]},{
@@ -65,27 +65,27 @@ const TabelasDeImpostoDeRenda = [{
         aliquota: 0
     },{
         nome: "5%",
-        base: 339001,
+        base: 3390.01,
         aliquota: 0.05
     },{
         nome: "10%",
-        base: 678001,
+        base: 6780.01,
         aliquota: 0.1
     },{
         nome: "15%",
-        base: 1017001,
+        base: 10170.01,
         aliquota: 0.15
     },{
         nome: "20%",
-        base: 1356001,
+        base: 13560.01,
         aliquota: 0.2
     }, {
         nome: "30%",
-        base: 2712001,
+        base: 27120.01,
         aliquota: 0.3
     }, {
         nome: "40%",
-        base: 10848001,
+        base: 108480.01,
         aliquota: 0.4
     }]
 }];

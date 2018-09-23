@@ -19,14 +19,21 @@
                 </div>
                 <div class="field-body">
                     <div class="field">
-                        <p class="control">
+                        <div class="control has-icons-left has-icons-right">
                             <input v-model="salario" placeholder="Informe sua renda mensal atual aqui" class="input">
-                        </p>
+                            <span class="icon is-small is-left">
+                                <span>R&dollar;</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <bar-chart :data="grafico" :colors="[['#2ecc71', '#9b59b6', '#bdc3c7', '#e74c3c']]" :download="true"></bar-chart>
+            <bar-chart :data="grafico"
+                       :colors="cores"
+                       :download="true"
+                       decimal=","
+                       prefix="R$"></bar-chart>
 
             <section class="message is-light" v-show="salario !== null" style="margin-top:30px">
                 <div class="message-header">
@@ -54,6 +61,7 @@ export default {
     name: 'app',
     data () {
         return {
+            cores: [["#00a8ff", "#fbc531", "#44bd32", "#ff7f50"]],
             tabelas: TabelasDeImpostoDeRenda,
             grafico: [],
             salario: null

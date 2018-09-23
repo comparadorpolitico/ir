@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="hero is-light">
+        <section class="hero is-primary">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
@@ -20,7 +20,10 @@
                 <div class="field-body">
                     <div class="field">
                         <div class="control has-icons-left has-icons-right">
-                            <input v-model="salario" placeholder="Informe sua renda mensal atual aqui" class="input">
+                            <input v-model="salario"
+                                   v-on:keyup="calcularImposto"
+                                   placeholder="Informe sua renda mensal atual aqui"
+                                   class="input">
                             <span class="icon is-small is-left">
                                 <span>R&dollar;</span>
                             </span>
@@ -34,20 +37,6 @@
                        :download="true"
                        decimal=","
                        prefix="R$"></bar-chart>
-
-            <section class="message is-light" v-show="salario !== null" style="margin-top:30px">
-                <div class="message-header">
-                    <p>Resultado</p>
-                </div>
-                <div class="message-body">
-                    <p v-show="salario !== null ">Com salário de {{ salario }}.</p>
-                    <div v-for="tabela in tabelas">
-                        {{tabela.nome}} : {{ calcularImposto(tabela, salario) }}
-                    </div>
-                </div>
-            </section>
-
-
         </div>
     </div>
 
@@ -68,11 +57,15 @@ export default {
         }
     },
     methods: {
-        calcularImposto(tabela, salario) {
-            const calculadora = new CalculadoraDeImpostoDeRenda(tabela.tabela);
-            const impostoDevido = calculadora.calcular(salario);
-            this.grafico.push([tabela.nome, impostoDevido]);
-            return impostoDevido;
+        calcularImposto() {
+
+            this.tabelas.forEach(tabela => {
+                const calculadora = new CalculadoraDeImpostoDeRenda(tabela.tabela);
+                const impostoDevido = calculadora.calcular(this.salario);
+                this.grafico.push([tabela.nome, impostoDevido]);
+                return impostoDevido;
+            });
+
         }
     }
 }

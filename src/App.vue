@@ -129,25 +129,27 @@ export default {
                 return texto.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         },
         calcularImposto() {
+            const cores = {
+                vermelho: "#ff3860",
+                verde: "#23d160",
+                cinza: "#363636"
+            };
             const calculadoraParaTabelaVigente = new CalculadoraDeImpostoDeRenda(this.tabelasBase.vigente.tabela);
             const impostoDevidoVigente = calculadoraParaTabelaVigente.calcular(this.salario);
             const vigente = {
                 nome: this.tabelasBase.vigente.nome,
                 eVigente: true,
                 impostoDevido: impostoDevidoVigente,
-                cor: "#777",
+                cor: cores.cinza,
                 diferenca: 0,
             };
-
             this.resultados = [vigente];
-            let vermelhos = ["hsl(7, 100%, 40%)", "hsl(7, 80%, 48%)", "hsl(7, 60%, 58%)"];
-            let verdes = ["hsl(102, 100%, 25%)", "hsl(102, 80%, 33%)", "hsl(102, 60%, 43%)"];
             this.tabelasBase.propostas.forEach(tabela => {
 
                 const calculadora = new CalculadoraDeImpostoDeRenda(tabela.tabela);
                 const impostoVigenteDessaProposta = calculadora.calcular(this.salario);
                 const diferenca = impostoDevidoVigente - impostoVigenteDessaProposta;
-                const cor = diferenca > 0 ? verdes.pop() : vermelhos.shift();
+                const cor = diferenca > 0 ? cores.verde : cores.vermelho;
 
                 const proposta = {
                     nome: tabela.nome,

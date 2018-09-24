@@ -5,7 +5,7 @@
         <div class="control" v-for="etiqueta in etiquetas">
             <div class="tags has-addons" title="Clique para saber mais">
                 <span class="tag is-light">{{etiqueta.nome}}</span>
-                <span v-bind:class="etiqueta.temDesconto || etiqueta.eIsento ? 'tag is-success' : 'tag is-danger'">
+                <span v-bind:class="etiqueta.eVigente ? 'tag is-dark' : etiqueta.temDesconto ? 'tag is-success' : 'tag is-danger'">
                     <span>{{ etiqueta.texto }}</span>
                 </span>
             </div>

@@ -87,6 +87,9 @@ export default {
         },
         etiquetas: function () {
             const textosPossiveis = {
+                "R$ <imposto-devido>": (resultado) => {
+                    return resultado.eVigente;
+                },
                 "(Isento)" : (resultado) => {
                     return resultado.impostoDevido === 0
                 },
@@ -98,16 +101,16 @@ export default {
                 }
             };
             return this.resultados
-                .filter(resultado => resultado.eVigente !== true)
                 .map(resultado => {
-
                     const texto = Object.keys(textosPossiveis)
                                             .filter(texto => textosPossiveis[texto](resultado))
                                             .join(" ")
+                                            .replace("<imposto-devido>", resultado.impostoDevido)
                                             .replace("<diferenca>", Math.abs(resultado.diferenca));
                     return {
                         nome: resultado.nome,
                         temDesconto: resultado.temDesconto,
+                        eVigente: resultado.eVigente,
                         texto
                     }
                 });

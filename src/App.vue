@@ -25,10 +25,13 @@
 
 
         <div class="container section" id="app">
+
+
             <div class="field is-horizontal">
                 <div class="field-label is-normal">
                     <label class="label">Renda / Salário</label>
                 </div>
+
                 <div class="field-body">
                     <div class="field">
                         <div class="control has-icons-left has-icons-right">
@@ -43,7 +46,7 @@
                     </div>
                 </div>
             </div>
-
+            <etiquetas :etiquetas="etiquetas"></etiquetas>
             <bar-chart  :xtitle="salarioEmTexto"
                         ytitle="Propostas"
                         :data="grafico"
@@ -64,6 +67,7 @@ import CalculadoraDeImpostoDeRenda from "./componentes/CalculadoraDeImpostoDeRen
 import TabelasDeImpostoDeRenda from "./componentes/TabelasDeImpostoDeRenda";
 import ModalDeEntrada from "./componentes/ModalDeEntrada.vue";
 import Rodape from "./componentes/Rodape.vue";
+import Etiquetas from "./componentes/Etiquetas.vue";
 
 export default {
     name: 'app',
@@ -76,28 +80,57 @@ export default {
     },
     computed: {
         cores: function() {
-            return [this.resultados.map(tabela => tabela.cor)];
+            return [this.resultados.map(resultado => resultado.cor)];
         },
         grafico: function () {
-            return this.resultados.map(tabela => [tabela.nome, tabela.impostoDevido]);
+            return this.resultados.map(resultado => [resultado.nome, resultado.impostoDevido]);
+        },
+        etiquetas: function () {
+            const textosPossiveis = {
+                "(Isento)" : (resultado) => {
+                    return resultado.impostoDevido === 0
+                },
+                "Pague menos R$ <diferenca>": (resultado) => {
+                    return resultado.diferenca > 0;
+                },
+                "Pague mais R$ <diferenca>": (resultado) => {
+                    return resultado.diferenca < 0;
+                }
+            };
+            return this.resultados
+                .filter(resultado => resultado.eVigente !== true)
+                .map(resultado => {
+
+                    const texto = Object.keys(textosPossiveis)
+                                            .filter(texto => textosPossiveis[texto](resultado))
+                                            .join(" ")
+                                            .replace("<diferenca>", Math.abs(resultado.diferenca));
+                    return {
+                        nome: resultado.nome,
+                        temDesconto: resultado.temDesconto,
+                        texto
+                    }
+                });
         },
         salarioEmTexto: function() {
-            const toDotNotation = (text) => {
-                return text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            };
-            return `Salário: R$ ${this.salario === null ? 0 : toDotNotation(this.salario) },00` ;
+            return `Salário: R$ ${this.salario === null ? 0 : this.inserirPontuacao(this.salario) },00` ;
         }
     },
     components: {
+        "etiquetas": Etiquetas,
         "rodape": Rodape,
         "modal-de-entrada" : ModalDeEntrada
     },
     methods: {
+        inserirPontuacao(texto) {
+                return texto.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        },
         calcularImposto() {
             const calculadoraParaTabelaVigente = new CalculadoraDeImpostoDeRenda(this.tabelasBase.vigente.tabela);
             const impostoDevidoVigente = calculadoraParaTabelaVigente.calcular(this.salario);
             const vigente = {
                 nome: this.tabelasBase.vigente.nome,
+                eVigente: true,
                 impostoDevido: impostoDevidoVigente,
                 cor: "#777",
                 diferenca: 0,
@@ -116,6 +149,8 @@ export default {
                 const proposta = {
                     nome: tabela.nome,
                     impostoDevido: impostoVigenteDessaProposta,
+                    eVigente: false,
+                    temDesconto: diferenca >= 0,
                     cor,
                     diferenca,
                 };

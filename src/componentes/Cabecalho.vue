@@ -1,5 +1,5 @@
 <template>
-    <header class="hero is-primary">
+    <header class="hero is-dark">
         <div class="hero-body">
             <div class="container">
                 <h1 class="title">

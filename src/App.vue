@@ -1,37 +1,38 @@
 <template>
     <div>
         <cabecalho></cabecalho>
-        <div class="container section" id="app">
-            <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                    <label class="label">Renda / Salário</label>
-                </div>
-
-                <div class="field-body">
-                    <div class="field">
-                        <div class="control has-icons-left has-icons-right">
-                            <input v-model="salario"
-                                   v-on:keyup="calcularImposto"
-                                   placeholder="Informe sua renda mensal atual aqui"
-                                   class="input">
-                            <span class="icon is-small is-left">
-                                <span>R&dollar;</span>
-                            </span>
+        <main>
+            <section class="container section">
+                <div class="columns">
+                    <div class="column is-one-third">
+                        <div class="field">
+                            <label class="label">Renda / Salário </label>
+                            <div class="control">
+                                <div class="control has-icons-left has-icons-right">
+                                    <input v-model="salario"
+                                           v-on:keyup="calcularImposto"
+                                           placeholder="Informe sua renda mensal atual aqui"
+                                           class="input">
+                                    <span class="icon is-small is-left"><span>R&dollar;</span></span>
+                                </div>
+                            </div>
                         </div>
+                        <etiquetas :etiquetas="etiquetas"></etiquetas>
+                    </div>
+                    <div class="column is-two-thirds">
+                        <column-chart  :xtitle="salarioEmTexto"
+                                       ytitle="Propostas"
+                                       :data="grafico"
+                                       legend="true"
+                                       :dataset="{borderWidth: 10}"
+                                       :colors="cores"
+                                       :download="true"
+                                       decimal=","
+                                       prefix="R$"></column-chart>
                     </div>
                 </div>
-            </div>
-            <etiquetas :etiquetas="etiquetas"></etiquetas>
-            <bar-chart  :xtitle="salarioEmTexto"
-                        ytitle="Propostas"
-                        :data="grafico"
-                        legend="true"
-                        :dataset="{borderWidth: 10}"
-                        :colors="cores"
-                        :download="true"
-                        decimal=","
-                        prefix="R$"></bar-chart>
-        </div>
+            </section>
+        </main>
         <rodape></rodape>
     </div>
 

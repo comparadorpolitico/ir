@@ -1,32 +1,7 @@
 <template>
     <div>
-        <header class="hero is-primary">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">
-                        Comparador de Imposto de Renda
-                    </h1>
-                    <h2 class="subtitle is-hidden-mobile">
-                        Descubra quanto você paga hoje e quanto pagaria de acordo com várias propostas de alteração da tabela do imposto de renda.
-                    </h2>
-                </div>
-            </div>
-            <div class="hero-foot">
-                <nav class="tabs is-boxed">
-                    <div class="container">
-                        <ul>
-                            <li class="is-active"><a href>Propostas</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </header>
-
-
-
+        <cabecalho></cabecalho>
         <div class="container section" id="app">
-
-
             <div class="field is-horizontal">
                 <div class="field-label is-normal">
                     <label class="label">Renda / Salário</label>
@@ -68,6 +43,7 @@ import TabelasDeImpostoDeRenda from "./componentes/TabelasDeImpostoDeRenda";
 import ModalDeEntrada from "./componentes/ModalDeEntrada.vue";
 import Rodape from "./componentes/Rodape.vue";
 import Etiquetas from "./componentes/Etiquetas.vue";
+import Cabecalho from "./componentes/Cabecalho.vue";
 
 export default {
     name: 'app',
@@ -122,6 +98,7 @@ export default {
     components: {
         "etiquetas": Etiquetas,
         "rodape": Rodape,
+        "cabecalho" : Cabecalho,
         "modal-de-entrada" : ModalDeEntrada
     },
     methods: {

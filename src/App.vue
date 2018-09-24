@@ -44,12 +44,17 @@
                 </div>
             </div>
 
-            <bar-chart :data="grafico"
-                       :colors="cores"
-                       :download="true"
-                       decimal=","
-                       prefix="R$"></bar-chart>
+            <bar-chart  :xtitle="salarioEmTexto"
+                        ytitle="Propostas"
+                        :data="grafico"
+                        legend="true"
+                        :dataset="{borderWidth: 10}"
+                        :colors="cores"
+                        :download="true"
+                        decimal=","
+                        prefix="R$"></bar-chart>
         </div>
+        <rodape></rodape>
     </div>
 
 </template>
@@ -57,25 +62,65 @@
 <script>
 import CalculadoraDeImpostoDeRenda from "./componentes/CalculadoraDeImpostoDeRenda";
 import TabelasDeImpostoDeRenda from "./componentes/TabelasDeImpostoDeRenda";
+import ModalDeEntrada from "./componentes/ModalDeEntrada.vue";
+import Rodape from "./componentes/Rodape.vue";
 
 export default {
     name: 'app',
     data () {
         return {
-            cores: [["#00a8ff", "#fbc531", "#44bd32", "#ff7f50"]],
-            tabelas: TabelasDeImpostoDeRenda,
-            grafico: [],
+            tabelasBase: TabelasDeImpostoDeRenda,
+            resultados : [],
             salario: null
         }
     },
+    computed: {
+        cores: function() {
+            return [this.resultados.map(tabela => tabela.cor)];
+        },
+        grafico: function () {
+            return this.resultados.map(tabela => [tabela.nome, tabela.impostoDevido]);
+        },
+        salarioEmTexto: function() {
+            const toDotNotation = (text) => {
+                return text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            };
+            return `Salário: R$ ${this.salario === null ? 0 : toDotNotation(this.salario) },00` ;
+        }
+    },
+    components: {
+        "rodape": Rodape,
+        "modal-de-entrada" : ModalDeEntrada
+    },
     methods: {
         calcularImposto() {
+            const calculadoraParaTabelaVigente = new CalculadoraDeImpostoDeRenda(this.tabelasBase.vigente.tabela);
+            const impostoDevidoVigente = calculadoraParaTabelaVigente.calcular(this.salario);
+            const vigente = {
+                nome: this.tabelasBase.vigente.nome,
+                impostoDevido: impostoDevidoVigente,
+                cor: "#777",
+                diferenca: 0,
+            };
 
-            this.tabelas.forEach(tabela => {
+            this.resultados = [vigente];
+            let vermelhos = ["hsl(7, 100%, 40%)", "hsl(7, 80%, 48%)", "hsl(7, 60%, 58%)"];
+            let verdes = ["hsl(102, 100%, 25%)", "hsl(102, 80%, 33%)", "hsl(102, 60%, 43%)"];
+            this.tabelasBase.propostas.forEach(tabela => {
+
                 const calculadora = new CalculadoraDeImpostoDeRenda(tabela.tabela);
-                const impostoDevido = calculadora.calcular(this.salario);
-                this.grafico.push([tabela.nome, impostoDevido]);
-                return impostoDevido;
+                const impostoVigenteDessaProposta = calculadora.calcular(this.salario);
+                const diferenca = impostoDevidoVigente - impostoVigenteDessaProposta;
+                const cor = diferenca > 0 ? verdes.pop() : vermelhos.shift();
+
+                const proposta = {
+                    nome: tabela.nome,
+                    impostoDevido: impostoVigenteDessaProposta,
+                    cor,
+                    diferenca,
+                };
+
+                this.resultados.push(proposta);
             });
 
         }

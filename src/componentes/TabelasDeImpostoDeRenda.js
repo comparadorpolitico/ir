@@ -1,6 +1,6 @@
 const TabelasDeImpostoDeRenda = {
     vigente: {
-        nome: "Atual",
+        nome: "Hoje",
         tabela: [
             {
                 nome: "Isento",

@@ -1,7 +1,7 @@
 <template>
     <div>
         <cabecalho></cabecalho>
-        <main>
+        <main v-if="this.$store.state.jaCalculouUmaVez">
             <section class="container section">
                 <div class="columns">
                     <div class="column is-one-third">
@@ -9,10 +9,10 @@
                             <label class="label">Renda / Salário </label>
                             <div class="control">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input v-model="salario"
-                                           v-on:keyup="calcularImposto"
-                                           placeholder="Informe sua renda mensal atual aqui"
-                                           class="input">
+                                    <input  :value="this.$store.state.salario"
+                                            placeholder="Informe sua renda mensal atual aqui"
+                                            @input="calcularImposto"
+                                            class="input">
                                     <span class="icon is-small is-left"><span>R&dollar;</span></span>
                                 </div>
                             </div>
@@ -21,19 +21,26 @@
                     </div>
                     <div class="column is-two-thirds">
                         <column-chart  :xtitle="salarioEmTexto"
-                                       ytitle="Propostas"
-                                       :data="grafico"
-                                       legend="true"
-                                       :dataset="{borderWidth: 10}"
-                                       :colors="cores"
-                                       :download="true"
-                                       decimal=","
-                                       prefix="R$"></column-chart>
+                            ytitle="Propostas"
+                            :data="grafico"
+                            legend="true"
+                            :colors="cores"
+                            :download="true"
+                            decimal=","
+                            prefix="R$">
+                        </column-chart>
                     </div>
                 </div>
             </section>
         </main>
+        <main v-else>
+            <section class="container section">
+                <campo-para-informar-renda></campo-para-informar-renda>
+                <button class="button is-link" @click="calcularImposto">Calcular</button>
+            </section>
+        </main>
         <rodape></rodape>
+        <modal-de-entrada></modal-de-entrada>
     </div>
 
 </template>
@@ -45,17 +52,22 @@ import ModalDeEntrada from "./componentes/ModalDeEntrada.vue";
 import Rodape from "./componentes/Rodape.vue";
 import Etiquetas from "./componentes/Etiquetas.vue";
 import Cabecalho from "./componentes/Cabecalho.vue";
+import CampoParaInformarRenda from "./componentes/CampoParaInformarRenda.vue";
 
 export default {
     name: 'app',
     data () {
         return {
-            tabelasBase: TabelasDeImpostoDeRenda,
-            resultados : [],
-            salario: null
+            tabelas: TabelasDeImpostoDeRenda
         }
     },
     computed: {
+        resultados: function () {
+            return this.$store.state.resultados;
+        },
+        salario: function () {
+            return this.$store.state.salario;
+        },
         cores: function() {
             return [this.resultados.map(resultado => resultado.cor)];
         },
@@ -80,10 +92,11 @@ export default {
             return this.resultados
                 .map(resultado => {
                     const texto = Object.keys(textosPossiveis)
-                                            .filter(texto => textosPossiveis[texto](resultado))
-                                            .join(" ")
-                                            .replace("<imposto-devido>", resultado.impostoDevido)
-                                            .replace("<diferenca>", Math.abs(resultado.diferenca));
+                        .filter(texto => textosPossiveis[texto](resultado))
+                        .join(" ")
+                        .replace("<imposto-devido>", resultado.impostoDevido)
+                        .replace("<diferenca>", Math.abs(resultado.diferenca));
+
                     return {
                         nome: resultado.nome,
                         temDesconto: resultado.temDesconto,
@@ -97,50 +110,22 @@ export default {
         }
     },
     components: {
+        CampoParaInformarRenda,
+        ModalDeEntrada,
         "etiquetas": Etiquetas,
         "rodape": Rodape,
         "cabecalho" : Cabecalho,
-        "modal-de-entrada" : ModalDeEntrada
+        "modal-de-entrada" : ModalDeEntrada,
+        "campo-para-informar-renda": CampoParaInformarRenda
     },
     methods: {
         inserirPontuacao(texto) {
                 return texto.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         },
-        calcularImposto() {
-            const cores = {
-                vermelho: "#ff3860",
-                verde: "#23d160",
-                cinza: "#363636"
-            };
-            const calculadoraParaTabelaVigente = new CalculadoraDeImpostoDeRenda(this.tabelasBase.vigente.tabela);
-            const impostoDevidoVigente = calculadoraParaTabelaVigente.calcular(this.salario);
-            const vigente = {
-                nome: this.tabelasBase.vigente.nome,
-                eVigente: true,
-                impostoDevido: impostoDevidoVigente,
-                cor: cores.cinza,
-                diferenca: 0,
-            };
-            this.resultados = [vigente];
-            this.tabelasBase.propostas.forEach(tabela => {
-
-                const calculadora = new CalculadoraDeImpostoDeRenda(tabela.tabela);
-                const impostoVigenteDessaProposta = calculadora.calcular(this.salario);
-                const diferenca = impostoDevidoVigente - impostoVigenteDessaProposta;
-                const cor = diferenca > 0 ? cores.verde : cores.vermelho;
-
-                const proposta = {
-                    nome: tabela.nome,
-                    impostoDevido: impostoVigenteDessaProposta,
-                    eVigente: false,
-                    temDesconto: diferenca >= 0,
-                    cor,
-                    diferenca,
-                };
-
-                this.resultados.push(proposta);
-            });
-
+        calcularImposto: function(evento) {
+            this.$store.commit("definirSalario", evento.target.value);
+            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: this.tabelas, salario: this.salario });
+            this.$store.commit("registraPrimeiroCalculo");
         }
     }
 }

@@ -2,9 +2,9 @@
     <div>
         <div v-for="etiqueta in etiquetas" class="tags has-addons"
              v-bind:class="etiqueta.eVigente ? 'tags--vigente' : 'p-margin-0' ">
-            <span class="tag is-light">{{etiqueta.nome}}</span>
-            <span v-bind:class="etiqueta.eVigente ? 'tag is-dark' : etiqueta.temDesconto ? 'tag is-success' : 'tag is-danger'">
-                <span>{{ etiqueta.texto }}</span>
+            <span v-bind:class="etiqueta.eVigente ? 'tag is-dark' : etiqueta.temDesconto ? 'tag is-success' : 'tag is-danger'">{{etiqueta.nome}}</span>
+            <span class="tag is-light">
+                <span class="has-text-weight-semibold">{{ etiqueta.texto }}</span>
             </span>
         </div>
     </div>

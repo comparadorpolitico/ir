@@ -21,7 +21,7 @@
                     </div>
                     <div class="column is-two-thirds">
                         <column-chart  :xtitle="salarioEmTexto"
-                            ytitle="Propostas"
+                            ytitle="Imposto mensal"
                             :data="grafico"
                             legend="true"
                             :colors="cores"

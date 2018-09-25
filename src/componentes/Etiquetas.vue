@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-for="etiqueta in etiquetas" class="tags has-addons"
-             v-bind:class="etiqueta.eVigente ? 'tags--vigente' : '' ">
+             v-bind:class="etiqueta.eVigente ? 'tags--vigente' : 'p-margin-0' ">
             <span class="tag is-light">{{etiqueta.nome}}</span>
             <span v-bind:class="etiqueta.eVigente ? 'tag is-dark' : etiqueta.temDesconto ? 'tag is-success' : 'tag is-danger'">
                 <span>{{ etiqueta.texto }}</span>
@@ -12,11 +12,14 @@
 <style>
 
 .tags--vigente {
+    padding-bottom: 10px;
     border-bottom: 1px solid #e5e5e5;
 }
-
+.p-margin-0 {
+    margin: 0 !important;
+}
 .tags--vigente + .tags {
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 

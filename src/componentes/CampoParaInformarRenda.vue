@@ -21,7 +21,6 @@ export default {
     methods: {
         definirSalario: function (evento) {
             this.$store.commit("definirSalario", evento.target.value);
-            console.log(this.$store.state.salario);
         }
     }
 }

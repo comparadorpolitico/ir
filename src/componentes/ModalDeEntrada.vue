@@ -58,12 +58,17 @@ export default {
                 <button class="button is-link"
                         @click="calcularImpostoDeRendaInvididual"
                         :disabled="salario === null || salario === '' || estaCarregando ">
-                        <span v-if="!estaCarregando">Calcular</span>
-                        <span v-else>
-                            <icone-de-carregando></icone-de-carregando>
+                        <span>
+                            <span v-bind:class="estaCarregando ? 'p-visibility-hidden' : '' ">Calcular</span>
+                            <icone-de-carregando v-if="estaCarregando"></icone-de-carregando>
                         </span>
                 </button>
             </footer>
         </div>
     </div>
 </template>
+<style>
+    .p-visibility-hidden {
+        visibility: hidden;
+    }
+</style>

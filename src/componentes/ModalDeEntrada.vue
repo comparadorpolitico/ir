@@ -1,26 +1,42 @@
 <script>
 import CampoParaInformarRenda from "./CampoParaInformarRenda.vue";
 import TabelasDeImpostoDeRenda from "./TabelasDeImpostoDeRenda";
+import IconeDeCarregando from "./IconeDeCarregando.vue";
 
 export default {
     name: "modal-de-entrada",
     data() {
         return {
-            estaAberto: true
+            estaAberto: true,
+            estaCarregando: false
+        }
+    },
+    computed: {
+        salario() {
+            return this.$store.state.salario;
         }
     },
     methods: {
         fechar() {
-            this.estaAberto = false;
+            if(this.salario !== null){
+                this.estaAberto = false;
+                this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salario });
+            }
         },
         calcularImpostoDeRendaInvididual() {
-            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salario })
-            this.$store.commit("registraPrimeiroCalculo");
-            this.fechar();
+            this.estaCarregando = true;
+            setTimeout(function(){
+                this.estaCarregando = false;
+                this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salario });
+                this.$store.commit("registraPrimeiroCalculo");
+                this.fechar();
+            }.bind(this), Math.floor(Math.random() * 600) + 300 );
+
         }
     },
     components: {
-        "campo-para-informar-renda": CampoParaInformarRenda
+        CampoParaInformarRenda,
+        IconeDeCarregando
     }
 }
 </script>
@@ -35,11 +51,18 @@ export default {
 
             <section class="modal-card-body">
                 <campo-para-informar-renda></campo-para-informar-renda>
-                <p>Informe sua renda mensal e compare o valor do seu imposto de renda.</p>
+                <p>Informe sua renda mensal e compare o valor do seu imposto de renda em várias tabelas diferentes.</p>
             </section>
 
             <footer class="modal-card-foot">
-                <button class="button is-link" @click="calcularImpostoDeRendaInvididual">Calcular</button>
+                <button class="button is-link"
+                        @click="calcularImpostoDeRendaInvididual"
+                        :disabled="salario === null || salario === '' || estaCarregando ">
+                        <span v-if="!estaCarregando">Calcular</span>
+                        <span v-else>
+                            <icone-de-carregando></icone-de-carregando>
+                        </span>
+                </button>
             </footer>
         </div>
     </div>

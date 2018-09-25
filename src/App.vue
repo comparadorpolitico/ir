@@ -34,10 +34,7 @@
             </section>
         </main>
         <main v-else>
-            <section class="container section">
-                <campo-para-informar-renda></campo-para-informar-renda>
-                <button class="button is-link" @click="calcularImposto">Calcular</button>
-            </section>
+            <section class="container section"></section>
         </main>
         <rodape></rodape>
         <modal-de-entrada></modal-de-entrada>
@@ -57,9 +54,7 @@ import CampoParaInformarRenda from "./componentes/CampoParaInformarRenda.vue";
 export default {
     name: 'app',
     data () {
-        return {
-            tabelas: TabelasDeImpostoDeRenda
-        }
+        return {}
     },
     computed: {
         resultados: function () {
@@ -110,13 +105,11 @@ export default {
         }
     },
     components: {
-        CampoParaInformarRenda,
         ModalDeEntrada,
-        "etiquetas": Etiquetas,
-        "rodape": Rodape,
-        "cabecalho" : Cabecalho,
-        "modal-de-entrada" : ModalDeEntrada,
-        "campo-para-informar-renda": CampoParaInformarRenda
+        Etiquetas,
+        Rodape,
+        Cabecalho,
+        CampoParaInformarRenda
     },
     methods: {
         inserirPontuacao(texto) {
@@ -124,7 +117,7 @@ export default {
         },
         calcularImposto: function(evento) {
             this.$store.commit("definirSalario", evento.target.value);
-            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: this.tabelas, salario: this.salario });
+            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.salario });
             this.$store.commit("registraPrimeiroCalculo");
         }
     }

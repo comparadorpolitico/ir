@@ -10,6 +10,7 @@
                             <div class="control">
                                 <div class="control has-icons-left has-icons-right">
                                     <input  :value="this.$store.state.salario"
+                                            v-mask="'money'"
                                             placeholder="Informe sua renda mensal atual aqui"
                                             @input="calcularImposto"
                                             class="input">
@@ -50,11 +51,15 @@ import Rodape from "./componentes/Rodape.vue";
 import Etiquetas from "./componentes/Etiquetas.vue";
 import Cabecalho from "./componentes/Cabecalho.vue";
 import CampoParaInformarRenda from "./componentes/CampoParaInformarRenda.vue";
+import AwesomeMask from "awesome-mask"
 
 export default {
     name: 'app',
     data () {
         return {}
+    },
+    directives: {
+        'mask': AwesomeMask
     },
     computed: {
         resultados: function () {
@@ -89,8 +94,8 @@ export default {
                     const texto = Object.keys(textosPossiveis)
                         .filter(texto => textosPossiveis[texto](resultado))
                         .join(" ")
-                        .replace("<imposto-devido>", resultado.impostoDevido)
-                        .replace("<diferenca>", Math.abs(resultado.diferenca));
+                        .replace("<imposto-devido>", this.inserirPontuacao(resultado.impostoDevido))
+                        .replace("<diferenca>", this.inserirPontuacao(Math.abs(resultado.diferenca)));
 
                     return {
                         nome: resultado.nome,
@@ -101,7 +106,7 @@ export default {
                 });
         },
         salarioEmTexto: function() {
-            return `Salário: R$ ${this.salario === null ? 0 : this.inserirPontuacao(this.salario) },00` ;
+            return `Salário: R$ ${this.salario === null ? 0 : this.inserirPontuacao(this.salario) }` ;
         }
     },
     components: {
@@ -117,7 +122,7 @@ export default {
         },
         calcularImposto: function(evento) {
             this.$store.commit("definirSalario", evento.target.value);
-            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.salario });
+            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salario });
             this.$store.commit("registraPrimeiroCalculo");
         }
     }

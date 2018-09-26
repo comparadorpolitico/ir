@@ -3,6 +3,9 @@ import CalculadoraDeImpostoDeRenda from "./CalculadoraDeImpostoDeRenda";
 const QuizStore = {
     state: {
         salario: null,
+        salarioSemPontuacao: function (){
+            return parseFloat(this.salario.replace(".", "").replace(",", "."));
+        },
         resultados: [],
         jaCalculouUmaVez: false,
     },

@@ -5,16 +5,21 @@
             <div class="control has-icons-left has-icons-right">
                 <input  placeholder="Renda"
                         @input="definirSalario"
+                        v-mask="'money'"
                         class="input is-large">
                 <span class="icon is-left"><span>R&dollar;</span></span>
             </div>
         </div>
     </div>
 </template>
-<script>
 
+<script>
+import AwesomeMask from "awesome-mask"
 export default {
     name: "CampoParaInformarRenda",
+    directives: {
+        'mask': AwesomeMask
+    },
     data () {
         return {}
     },

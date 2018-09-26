@@ -20,14 +20,14 @@ export default {
         fechar() {
             if(this.salario !== null){
                 this.estaAberto = false;
-                this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salario });
+                this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salarioSemPontuacao() });
             }
         },
         calcularImpostoDeRendaInvididual() {
             this.estaCarregando = true;
             setTimeout(function(){
                 this.estaCarregando = false;
-                this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salario });
+                this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salarioSemPontuacao() });
                 this.$store.commit("registraPrimeiroCalculo");
                 this.fechar();
             }.bind(this), Math.floor(Math.random() * 600) + 300 );

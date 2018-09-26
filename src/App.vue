@@ -122,7 +122,7 @@ export default {
         },
         calcularImposto: function(evento) {
             this.$store.commit("definirSalario", evento.target.value);
-            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salario });
+            this.$store.commit("calcularImpostoDeRendaIndividual", {tabelas: TabelasDeImpostoDeRenda, salario: this.$store.state.salarioSemPontuacao() });
             this.$store.commit("registraPrimeiroCalculo");
         }
     }

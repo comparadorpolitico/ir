@@ -4,7 +4,7 @@ const QuizStore = {
     state: {
         salario: null,
         salarioSemPontuacao: function (){
-            return parseFloat(this.salario.replace(".", "").replace(",", "."));
+            return parseFloat(this.salario.replace(/\./g, "").replace(/\,/g, "."));
         },
         resultados: [],
         jaCalculouUmaVez: false,
